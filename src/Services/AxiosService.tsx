@@ -6,7 +6,8 @@ export const APICheck = () => {
   const [warningOpen, setWarningOpen] = useState(false);
   useEffect(() => {}, []);
 
-  axios.defaults.baseURL = "http://localhost:4000/";
+  // axios.defaults.baseURL = "http://localhost:4000/";
+  //axios.defaults.withCredentials = true;
   axios.interceptors.response.use((response) => {
     if (response.data.Note) {
       setWarningOpen(true);
