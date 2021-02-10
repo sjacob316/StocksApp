@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./App.css";
 import { Navbar } from "./Components/Navbar";
 import { MainPage } from "./Components/Main";
@@ -8,10 +8,11 @@ import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import { Login } from "./Components/Login";
 import { Register } from "./Components/Register";
 import { PatternRecognition } from "./Components/Tools/PatternRecognition";
-
+import { myContext } from './Context';
 function App() {
-  const [selectedStockSymbol, setSelectedStockSymbol] = useState("");
-
+  const userObject = useContext(myContext);
+  console.log(userObject);
+  const [selectedStockSymbol, setSelectedStockSymbol] = useState(""); 
   return (
     <div className="App">
       <APICheck />

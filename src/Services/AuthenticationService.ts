@@ -23,6 +23,18 @@ export const AuthenticationService = {
         return axios.post('/api/auth/login', data)
     },
 
+    loginWithGoogle() {
+        return axios.get("/api/auth/google")
+    },
+
+    verifyAuthentication() {
+        return axios.post('/api/verify-token')
+    },
+
+    getUserData() {
+        return axios.get("/getuser", { withCredentials: true })
+    },
+
     logoutUser() {
         return axios.post("/api/auth/logout")
     }

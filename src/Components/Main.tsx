@@ -6,6 +6,7 @@ import { MainPageService } from "../Services/MainPageService";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import { Authorize } from "./Authorize";
+import { AuthenticationService } from "../Services/AuthenticationService";
 const localizer = momentLocalizer(moment);
 
 const StyledCarousel = styled(Carousel)`
@@ -28,11 +29,19 @@ export const MainPage = () => {
   const [myEventsList, setMyEventsList] = useState([]);
   useEffect(() => {
     console.log("main open");
+    AuthenticationService.verifyAuthentication().then((res: any) => {
+      console.log(res.data);
+    })
+    
     MainPageService.getGeneralNews().then((res) => {
       setNews(res.data);
       console.log(res);
     });
   }, []);
+
+  const loginWithGoogle = () => {
+    AuthenticationService.loginWithGoogle().then((data: any) => console.log(data))
+  }
 
   return (
     <div style={{ height: "100px", width: "100%" }}>
@@ -91,6 +100,7 @@ export const MainPage = () => {
               230.73
             </CardContent>
           </Card>
+          <button onClick={() => loginWithGoogle()}>Login with Google</button>
         </div>
       </div>
       <StyledCalendarContainer>
