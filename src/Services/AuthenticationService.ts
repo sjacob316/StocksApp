@@ -32,7 +32,7 @@ export const AuthenticationService = {
     },
 
     getUserData() {
-        return axios.get("/getuser", { withCredentials: true })
+        return axios.get("/auth/getuser", { withCredentials: true })
     },
 
     logoutUser() {
