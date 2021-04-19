@@ -7,10 +7,5 @@ export function Authorize() {
     token = Cookies.get();
   });
 
-  return (
-    <>
-      <h6>Hello</h6>
-      {token}
-    </>
-  );
+  return <></>;
 }

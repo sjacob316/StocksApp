@@ -15,7 +15,7 @@ import {
   useHistory,
 } from "react-router-dom";
 import { AuthenticationService } from "../Services/AuthenticationService";
-const axios = require("axios");
+import axios from "../Services/AxiosService";
 
 const StyledNavbar = styled.nav`
   background-color: #0b1f3d;
@@ -83,9 +83,14 @@ export function Navbar({ setSelectedStockSymbol }: NavbarPropsInterface) {
   };
 
   const handleLogoutClick = () => {
-    AuthenticationService.logoutUser().then((res) => {
-      history.push("/login");
+    console.log("log out");
+    axios.get("/auth/logout").then((res: any) => {
+      console.log(res);
     });
+    history.push("/login");
+    // AuthenticationService.logoutUser().then((res) => {
+    //   console.log("Attempting to log out");
+    // });
   };
 
   const searchSymbol = useCallback(
@@ -109,14 +114,14 @@ export function Navbar({ setSelectedStockSymbol }: NavbarPropsInterface) {
   return (
     <StyledNavbar>
       <StyledLogo onClick={handleHomePageClick}>Stocks App</StyledLogo>
-      {/* <TextField
+      <TextField
         placeholder="Ticker Symbol"
         color="secondary"
         onChange={(e) => setInputValue(e.target.value)}
       />
       <Button color="secondary" onClick={handleSelectedStock}>
         Go
-      </Button> */}
+      </Button>
       <StyledLink to="/tools" color="seconday">
         Tools
       </StyledLink>
