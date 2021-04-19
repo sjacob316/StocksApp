@@ -27,21 +27,35 @@ const StyledNewsContainer = styled.div`
 export const MainPage = () => {
   const [news, setNews] = useState([]);
   const [myEventsList, setMyEventsList] = useState([]);
+  const [upcomingIPOs, setUpcomingIPOs] = useState([]);
+  const [upcomingEarnings, setUpcomingEarnings] = useState([]);
+
   useEffect(() => {
-    console.log("main open");
     AuthenticationService.verifyAuthentication().then((res: any) => {
       console.log(res.data);
-    })
-    
+    });
+
     MainPageService.getGeneralNews().then((res) => {
       setNews(res.data);
       console.log(res);
     });
+
+    MainPageService.getIpoCalendar().then((res) => {
+      console.log(res);
+      setUpcomingIPOs(res.data.ipoCalendar);
+    });
+
+    MainPageService.getEarningsCalendar().then((res) => {
+      console.log(res.data.earningsCalendar);
+      setUpcomingEarnings(res.data.earningsCalendar);
+    });
   }, []);
 
   const loginWithGoogle = () => {
-    AuthenticationService.loginWithGoogle().then((data: any) => console.log(data))
-  }
+    AuthenticationService.loginWithGoogle().then((data: any) =>
+      console.log(data)
+    );
+  };
 
   return (
     <div style={{ height: "100px", width: "100%" }}>
@@ -100,7 +114,6 @@ export const MainPage = () => {
               230.73
             </CardContent>
           </Card>
-          <button onClick={() => loginWithGoogle()}>Login with Google</button>
         </div>
       </div>
       <StyledCalendarContainer>
@@ -108,22 +121,23 @@ export const MainPage = () => {
           <h4>IPO Calendar</h4>
           <Calendar
             localizer={localizer}
-            events={myEventsList}
-            startAccessor="start"
-            endAccessor="end"
+            events={upcomingIPOs}
+            startAccessor="date"
+            endAccessor="date"
             views={{
               month: true,
             }}
             style={{ height: 500, width: 500 }}
+            titleAccessor="name"
           />
         </div>
         <div style={{ marginRight: "10px" }}>
           <h4>Earnings Calendar</h4>
           <Calendar
             localizer={localizer}
-            events={myEventsList}
-            startAccessor="start"
-            endAccessor="end"
+            events={upcomingEarnings}
+            startAccessor="date"
+            endAccessor="date"
             views={{
               month: true,
             }}
