@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React from 'react';
-import axios from "../Services/AxiosService";
+import axios from "./AxiosService";
 
 
 export const StockService = {

@@ -12,7 +12,7 @@ export const AuthenticationService = {
             password
         }
         console.log(data);
-        return axios.post('/api/auth/register-user', data)
+        return axios.post('/auth/register-user', data)
     },
 
     loginUser(email: string, password: string) {
@@ -20,7 +20,7 @@ export const AuthenticationService = {
             email,
             password
         }
-        return axios.post('/api/auth/login', data)
+        return axios.post('/auth/login', data)
     },
 
     loginWithGoogle() {
@@ -36,6 +36,6 @@ export const AuthenticationService = {
     },
 
     logoutUser() {
-        return axios.post("/api/auth/logout")
+        return axios.get("/auth/logout")
     }
 }
