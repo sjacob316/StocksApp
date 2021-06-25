@@ -12,11 +12,17 @@ export const StockService = {
         return axios.get(`/api/stocks/overview/${stockSymbol}`)
     },
 
-    getIntradayStockPrices(stockSymbol: string) {
-        return axios.get(`/api/stocks/time-series/${stockSymbol}`)
+    getStockQuote(stockSymbol: string) {
+        return axios.get(`/api/stocks/quote/${stockSymbol}`)
     },
 
-    getStockInfo(stockSymbol: string) {
+    getIntradayStockPrices(stockSymbol: string, startTime: string, endTime: string) {
+        console.log("calling this")
+        console.log(`${stockSymbol} and ${startTime} and ${endTime}`)
+        return axios.get(`/api/stocks/stock-candle/${stockSymbol}/${startTime}/${endTime}`)
+    },
+
+    getStockInfo(stockSymbol: string) {        
         return axios.get(`/api/stocks/income/${stockSymbol}`)
     },
 
@@ -32,5 +38,13 @@ export const StockService = {
 
     getPeerStocks(stockSymbol: string) {
         return axios.get(`/api/stocks/peers/${stockSymbol}`)        
+    },
+
+    getNewsSentiment(stockSymbol: string) {
+        return axios.get(`/api/stocks/news-sentiment/${stockSymbol}`)
+    },
+
+    getSocialSentiment(stockSymbol: string) {
+        return axios.get(`/api/stocks/social-sentiment/${stockSymbol}`)
     }
 }

@@ -8,19 +8,29 @@ import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import { Login } from "./Components/Login";
 import { Register } from "./Components/Register";
 import { PatternRecognition } from "./Components/Tools/PatternRecognition";
-import { myContext } from './Context';
+import { UserContext } from './Context';
+import styled from "styled-components";
+
+const StyledContentContainer = styled.div`
+  overflow: auto;
+  height: 90%;
+  margin: 0 200px;
+`
 function App() {
-  const userObject = useContext(myContext);
-  console.log(userObject);
   const [selectedStockSymbol, setSelectedStockSymbol] = useState(""); 
+  const [copy, setCopy] = useState<string[]>([])
   return (
     <div className="App">
       <APICheck />
       <BrowserRouter>
-        <Navbar setSelectedStockSymbol={setSelectedStockSymbol} />
+      <UserContext.Provider value={{copy, setCopy}}>
+      <Navbar setSelectedStockSymbol={setSelectedStockSymbol} />
+        <StyledContentContainer>
         <Switch>
           <Route exact path="/">
-            <MainPage />
+            <MainPage 
+            selectedStockSymbol={selectedStockSymbol}
+            setSelectedStockSymbol={setSelectedStockSymbol}/>
           </Route>
           <Route path="/register">
             <Register />
@@ -38,6 +48,8 @@ function App() {
             <PatternRecognition />
           </Route>
         </Switch>
+        </StyledContentContainer>
+      </UserContext.Provider>        
       </BrowserRouter>
     </div>
   );

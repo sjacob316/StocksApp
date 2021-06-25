@@ -6,11 +6,11 @@ export const MainPageService = {
         return axios.get(`/api/stocks/general-news`);
     },
 
-    getIpoCalendar() {
-        return axios.get(`/api/stocks/ipo-calendar/2021-04-15/2021-05-14`);
+    getIpoCalendar(startDate: string, endDate: string) {
+        return axios.get(`/api/stocks/ipo-calendar/${startDate}/${endDate}`);
     },
 
     getEarningsCalendar() {
-        return axios.get(`/api/stocks/earnings-calendar/2021-04-15/2021-05-14`);
+        return axios.get(`/api/stocks/earnings-calendar/2021-04-01/2021-04-30`);
     }
 }

@@ -16,8 +16,16 @@ import {
 } from "react-router-dom";
 import { AuthenticationService } from "../Services/AuthenticationService";
 import axios from "../Services/AxiosService";
+import { AppBar, Toolbar, Typography } from "@material-ui/core";
+import SearchIcon from '@material-ui/icons/Search';
 
 const StyledNavbar = styled.nav`
+overflow: hidden;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 50px;
+  z-index: 100;
   background-color: #0b1f3d;
   display: flex;
   align-items: center;
@@ -66,7 +74,7 @@ interface NavbarPropsInterface {
 
 export function Navbar({ setSelectedStockSymbol }: NavbarPropsInterface) {
   const [inputValue, setInputValue] = useState("");
-  const [stockSymbols, setStockSymbols] = useState([]);
+  const [stockSymbols, setStockSymbols] = useState<any[]>([]);
   const classes = useStyles();
   const history = useHistory();
 
@@ -97,8 +105,8 @@ export function Navbar({ setSelectedStockSymbol }: NavbarPropsInterface) {
     debounce((value: any) => {
       console.log(value);
       StockService.getStockSymbols(value).then((res) => {
-        console.log(res.data);
-        if (res.data.bestMatches) setStockSymbols(res.data.bestMatches);
+        console.log(res.data.result);
+        if (res.data.result) setStockSymbols(res.data.result);
       });
     }, 800),
     []
@@ -111,24 +119,109 @@ export function Navbar({ setSelectedStockSymbol }: NavbarPropsInterface) {
     });
   };
 
+  const setTheSelectedStock = (value: any) => {
+    if(value) {
+      setSelectedStockSymbol(value.symbol)
+      history.push(`/stocks/${value.symbol}`);
+    }
+    
+  }
+
   return (
-    <StyledNavbar>
-      <StyledLogo onClick={handleHomePageClick}>Stocks App</StyledLogo>
-      <TextField
-        placeholder="Ticker Symbol"
-        color="secondary"
-        onChange={(e) => setInputValue(e.target.value)}
-      />
-      <Button color="secondary" onClick={handleSelectedStock}>
-        Go
-      </Button>
-      <StyledLink to="/tools" color="seconday">
-        Tools
-      </StyledLink>
-      <StyledLink to="/watching">Watching</StyledLink>
-      <Button onClick={handleLogoutClick} color="secondary">
-        Log out
-      </Button>
-    </StyledNavbar>
+    <AppBar position="sticky">
+      <Toolbar>
+        <Typography style={{ flex: 1, cursor: "pointer" }} onClick={handleHomePageClick}>
+          Stocks App
+        </Typography>
+        <Autocomplete     
+          freeSolo
+          id="country-select-demo"
+          style={{ width: 300, margin: "10px" }}
+          options={stockSymbols}
+          onChange={(e, value) => setTheSelectedStock(value)}
+          onInputChange={(e, value) => searchSymbol(value)}
+          size="small"
+          placeholder="Search Symbol"
+          // classes={{
+          //   option: classes.option,
+          // }}
+          autoHighlight
+          getOptionLabel={(option) => option.symbol}
+          renderOption={(option) => (
+        <div style={{display: "flex", alignItems: "center", width: "100%"}}>
+          <div>{option.description}</div>
+          <div style={{marginLeft: "auto", order: 2}}><b>{option.symbol}</b></div>
+        </div>
+      )}
+      renderInput={(params) => (
+        <TextField
+        type="text"
+        placeholder="Search Symbol"
+        onFocus={(event) => event.target.setAttribute('autocomplete', 'off')}
+          {...params}
+          variant="outlined"
+        />
+      )}
+    />
+    <Button>Tools</Button>
+    <Button onClick={handleLogoutClick}>
+      Log out
+    </Button>
+      </Toolbar>
+    </AppBar>
+    // <StyledNavbar>
+    //   <StyledLogo onClick={handleHomePageClick}>Stocks App</StyledLogo>
+    //   {/* <TextField
+    //     placeholder="Ticker Symbol"
+    //     color="secondary"
+    //     onChange={(e) => searchSymbol(e.target.value)}
+    //     // onChange={(e) => setInputValue(e.target.value)}
+    //   /> */}
+    //   <Autocomplete
+    //   // autoComplete={false}
+    //   id="country-select-demo"
+    //   style={{ width: 300 }}
+    //   options={stockSymbols}
+    //   onChange={(e, value) => setTheSelectedStock(value)}
+    //   onInputChange={(e, value) => searchSymbol(value)}
+    //   size="small"
+    //   // classes={{
+    //   //   option: classes.option,
+    //   // }}
+    //   autoHighlight
+    //   getOptionLabel={(option) => option.symbol}
+    //   renderOption={(option) => (
+    //     <React.Fragment>
+    //       <span>{option.description}</span>
+    //       <span><b>{option.symbol}</b></span>
+    //       {/* <span>{option.description}</span> */}
+    //       {/* <span>{countryToFlag(option.code)}</span>
+    //       {option.label} ({option.code}) +{option.phone} */}
+    //     </React.Fragment>
+    //   )}
+    //   renderInput={(params) => (
+    //     <TextField
+    //     type="text"
+    //     autoComplete="off"
+    //       {...params}
+    //       variant="outlined"
+    //       inputProps={{
+    //         ...params.inputProps,
+    //         autoComplete: 'new-password', // disable autocomplete and autofill
+    //       }}
+    //     />
+    //   )}
+    // />
+    //   <Button color="secondary" onClick={handleSelectedStock}>
+    //     Go
+    //   </Button>
+    //   <StyledLink to="/tools" color="seconday">
+    //     Tools
+    //   </StyledLink>
+    //   <StyledLink to="/watching">Watching</StyledLink>
+    //   <Button onClick={handleLogoutClick} color="secondary">
+    //     Log out
+    //   </Button>
+    // </StyledNavbar>
   );
 }

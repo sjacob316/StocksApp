@@ -1,10 +1,11 @@
 import { Snackbar } from "@material-ui/core";
 import axios from "axios";
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import GoogleLogin from "react-google-login";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { useGlobalContext, UserContext } from "../Context";
 import { AuthenticationService } from "../Services/AuthenticationService";
 import { Authorize } from "./Authorize";
 
@@ -25,12 +26,16 @@ export function Login() {
   const history = useHistory();
   const [error, setError] = useState("");
   const [errorState, setErrorState] = useState({ open: false, message: "" });
+  const { copy, setCopy } = useGlobalContext();
 
   const handleLoginClick = (values: any) => {
     AuthenticationService.loginUser(values.email, values.password).then(
-      (res: any) => {
+      (res) => {
         if (res.data.token) {
           history.push("/");
+          console.log(res.data);          
+          setCopy(res.data.savedStocks);
+          console.log(copy);
         } else {
           setError(res.data.error);
         }
